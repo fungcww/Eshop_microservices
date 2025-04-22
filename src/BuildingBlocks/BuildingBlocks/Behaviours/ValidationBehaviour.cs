@@ -9,6 +9,7 @@ namespace BuildingBlocks.Behaviours
         : IPipelineBehavior<TRequest, TResponse>
         //where TRequest : IRequest<TRequest>
         where TRequest : ICommand<TResponse> //only check if CRUD command 
+        //it's usage of pipeline behaviour
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken) 
         {
