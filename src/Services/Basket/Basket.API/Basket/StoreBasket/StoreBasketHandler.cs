@@ -1,6 +1,7 @@
 ﻿namespace Basket.API.Basket.StoreBasket
 {
     public record StoreBasketCommand(ShoppingCart Cart) : ICommand<StoreBasketResult>;
+    // *object name Cart need to be the same as Input Json object name   
     public record StoreBasketResult(string UserName);
     public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
     {
@@ -10,7 +11,10 @@
             RuleFor(x => x.Cart.UserName).NotEmpty().WithMessage("UserName is required");
         }
     }
-    public class StoreBasketCommandHandler 
+    public class StoreBasketCommandHandler(IBasketRepository repository) 
+        //constructor injection
+        //Repository pattern is used here because there are two data sources
+        //postgres db, cache : from tutor
         : ICommandHandler<StoreBasketCommand, StoreBasketResult>
     {
         public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
@@ -18,8 +22,9 @@
             ShoppingCart cart = command.Cart;
             //TODO: save the cart to the database (use Marten upsert - if exist = update)
             //TODO: update cache
+            await repository.StoreBasket(command.Cart, cancellationToken);
 
-            return new StoreBasketResult("swn");
+            return new StoreBasketResult(command.Cart.UserName);
         }
     }
 }
