@@ -1,4 +1,6 @@
-﻿namespace Basket.API.Basket.StoreBasket
+﻿using Discount.Grpc;
+
+namespace Basket.API.Basket.StoreBasket
 {
     public record StoreBasketCommand(ShoppingCart Cart) : ICommand<StoreBasketResult>;
     // *object name Cart need to be the same as Input Json object name   
@@ -11,7 +13,8 @@
             RuleFor(x => x.Cart.UserName).NotEmpty().WithMessage("UserName is required");
         }
     }
-    public class StoreBasketCommandHandler(IBasketRepository repository) 
+    public class StoreBasketCommandHandler
+        (IBasketRepository repository, DiscountProtoService.DiscountProtoServiceClient discountProto) 
         //constructor injection
         //Repository pattern is used here because there are two data sources
         //postgres db, cache : from tutor
@@ -19,12 +22,24 @@
     {
         public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
         {
+            //TODO : commuinicate with the discount grpc service
+            await DeductDiscount(command.Cart, cancellationToken);
+
             ShoppingCart cart = command.Cart;
             //TODO: save the cart to the database (use Marten upsert - if exist = update)
             //TODO: update cache
             await repository.StoreBasket(command.Cart, cancellationToken);
 
             return new StoreBasketResult(command.Cart.UserName);
+        }
+
+        private async Task DeductDiscount(ShoppingCart cart, CancellationToken cancellationToken)
+        {
+            foreach (var item in cart.Items)
+            {
+                var discount = await discountProto.GetDiscountAsync(new GetDiscountRequest { ProductName = item.ProductName }, cancellationToken: cancellationToken);
+                item.Price -= discount.Amount;
+            }
         }
     }
 }
