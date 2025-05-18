@@ -8,7 +8,7 @@ namespace Ordering.Infrastructure.Data.Extensions
         public static IEnumerable<Customer> Customers =>
         new List<Customer>
         {
-            Customer.Create(CustomerId.Of(new Guid("619eeaee-34ec-4833-8c69-911d7b071d16")), "mehmet", "mehmet@gmail.com"),
+            Customer.Create(CustomerId.Of(new Guid("619eeaee-34ec-4833-8c69-911d7b071d16")), "wai2", "wai2@gmail.com"),
             Customer.Create(CustomerId.Of(new Guid("8916c2e7-f4bf-4d73-982d-f502dbe8c2ec")), "wai", "wai@gmail.com")
         };
 
@@ -23,10 +23,10 @@ namespace Ordering.Infrastructure.Data.Extensions
         {
             get
             {
-                var address1 = Address.Of("mehmet", "ozkaya", "mehmet@gmail.com", "hk4", "hk3", "hk2", "14f");
+                var address1 = Address.Of("wai2", "wai23", "wai2@gmail.com", "hk4", "hk3", "hk2", "14f");
                 var address2 = Address.Of("wai", "fung", "wai@gmail.com", "pl4", "pl3", "pl2", "7f");
 
-                var payment1 = Payment.Of("mehmet", "1111111111112222", "11/28", "123", 1);
+                var payment1 = Payment.Of("wai2", "1111111111112222", "11/28", "123", 1);
                 var payment2 = Payment.Of("wai", "2222222222223333", "06/29", "133", 2);
 
                 var order1 = Order.Create(

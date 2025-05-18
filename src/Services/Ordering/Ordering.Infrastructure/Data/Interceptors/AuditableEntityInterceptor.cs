@@ -24,14 +24,14 @@ namespace Ordering.Infrastructure.Data.Interceptors
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedBy = "mehmet";
+                    entry.Entity.CreatedBy = "wai";
                     entry.Entity.CreateAt = DateTime.UtcNow;
                 }
                 if (entry.State == EntityState.Added 
                     || entry.State == EntityState.Modified
                     || entry.HasChangedOwnedEntities())
                 {
-                    entry.Entity.LastModifiedBy = "mehmet";
+                    entry.Entity.LastModifiedBy = "wai";
                     entry.Entity.LastModified = DateTime.UtcNow;
                 }
             }
