@@ -1,8 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-using Ordering.Application.Data;
-using Ordering.Application.Dtos;
-
-namespace Ordering.Application.Orders.Commands.CreateOrder
+﻿namespace Ordering.Application.Orders.Commands.CreateOrder
 {
     public class CreateOrderHandler(IApplicationDbContext dbContext)
         : ICommandHandler<CreateOrderCommand, CreateOrderResult>
@@ -50,7 +46,7 @@ namespace Ordering.Application.Orders.Commands.CreateOrder
                     orderDto.Payment.CardName,
                     orderDto.Payment.CardNumber,
                     orderDto.Payment.Expiration,
-                    orderDto.Payment.CVV,
+                    orderDto.Payment.Cvv,
                     orderDto.Payment.PaymentMethod)
                 );
             foreach(var orderItemDto in orderDto.OrderItems)

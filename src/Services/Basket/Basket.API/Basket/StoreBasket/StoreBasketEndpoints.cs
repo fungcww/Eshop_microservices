@@ -9,6 +9,11 @@ namespace Basket.API.Basket.StoreBasket
         {
             app.MapPost("/basket", async (StoreBasketRequest request, ISender sender) =>
             {
+                //checking
+                if (request == null)
+                    throw new ArgumentNullException(nameof(request));
+                //
+
                 var command = request.Adapt<StoreBasketCommand>();
                 var result = await sender.Send(command);
                 var response = result.Adapt<StoreBasketResponse>();
