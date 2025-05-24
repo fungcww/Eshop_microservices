@@ -2,7 +2,7 @@ using BuildingBlocks.Exceptions.Handler;
 using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Caching.Distributed;
+using BuildingBlocks.Messaging.MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +56,11 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 //    var basketRepository = provider.GetRequiredService<IBasketRepository>();
 //    return new CachedBasketRepository(basketRepository, provider.GetRequiredService<IDistributedCache>());
 //});
+
+//Async Communication Services
+builder.Services.AddMessageBroker(builder.Configuration);
+//on publisher side, we don't need to add consumers, so we can pass null or omit the assembly parameter
+//Publishers are only responsible for sending messages to the message broker and are unaware of who will consume those messages.
 
 //Cross-Cutting Services
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
